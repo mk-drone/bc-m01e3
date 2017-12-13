@@ -1,36 +1,41 @@
 $(function(){
-
+    let carousel = $("#carousel");
     let carouselUl = $("#carousel ul");
+    let interval;
 
-    // carouselUl.css("marginLeft",-400);
-    function slideLeft(){
-        carouselUl.animate({marginLeft: -400}, 500, function (){
-            // console.log(this);
-            let firstLi = $('#carousel ul li').first();
-            let lastLi = $('#carousel ul li').last();
+    carousel.on("mouseenter", stopSlider);
+    carousel.on("mouseleave", runSlider);
 
-            lastLi.after(firstLi);
-            $(this).css({marginLeft: 0});
-        });
+
+
+    function stopSlider(){
+       clearInterval(interval);
     }
+
+    function runSlider(){
+        interval = setInterval(slideRight, 2000);
+    }
+
+    function moveSlideLeft(){
+        let firstLi = $('#carousel ul li').first();
+        let lastLi = $('#carousel ul li').last();
+        lastLi.after(firstLi);
+        $(this).css({marginLeft: 0});
+    }
+
+    function slideLeft(){
+        carouselUl.animate({marginLeft: -400}, 500, moveSlideLeft);
+    }
+
     function slideRight(){
         let firstLi = $('#carousel ul li').first();
         let lastLi = $('#carousel ul li').last();
-
         // lastLi.after(firstLi);
         firstLi.before(lastLi);
         carouselUl.css({marginLeft: -400});
-
         carouselUl.animate({marginLeft: 0}, 500);
     }
-    let interval = setInterval(slideRight, 2000);
-
-    let carousel = $("#carousel");
-    carousel.on("mouseenter", function(e){
-        clearInterval(interval);
-    });
     
-    carousel.on("mouseleave", function(e){
-        interval = setInterval(slideRight, 2000);
-    });
+    /** INIT */
+    runSlider();
 });
